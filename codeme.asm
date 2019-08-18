@@ -69,56 +69,7 @@ EOC_CHECK1:
 	MOV 	AL,90h			;10010000b port A input & port B & C output
 	OUT 	CREG,AL
 
-EOC_CHECK2:	
-	IN 		AL,PORTC 		;reading port c results
-	AND 	AL,80h 			;considering only oin 7.
-	JZ 		EOC_CHECK2
-	
-	IN 		AL,PORTA		;digital o/p. of ADC is read
-	MOV 	WT2,AL			;store o/p. into memory as weight 2.
-	
-	
-	;Select IN2 
-	MOV 	AL,08h			;00001000b
-	OUT 	CREG,AL			;set PC4 logic zero
-	MOV 	AL,0bh			;00001011b
-	OUT 	CREG,AL			;set PC5 logic one
-	;IN2 is selected			
-    
-	CALL DELAY_SOC  		;100ns low to ADC.
-	
-	MOV 	AL,90h			;10010000b
-	OUT 	CREG,AL
 
-
-EOC_CHECK3:	
-	IN 		AL,PORTC 		;reading port c data
-	AND 	AL,80h 			;data of only pin 7 is considered.
-	JZ		EOC_CHECK3
-	
-	IN 		AL,PORTA     	;digital o/p of ADC is read
-	MOV 	WT3,AL      	;Store o/p into memory as weight 3.
-	
-	
-;Calculating converted Weight
-	MOV 	AH,00h		
-	MOV 	AL,WT1 			;AX register now holds weight 1.
-	MUL 	MLP1
-	DIV 	DIVI 			;changing the range of data to 0-100
-	MOV 	WT1,AL  		;i/p wt of load1 moved to WT1 
-	
-	MOV 	AH,00h		
-	MOV 	AL,WT2			;AX register now holds weight 3.
-	MUL 	MLP1
-	DIV 	DIVI			;changing the range of data to 0-100
-	MOV 	WT2,AL  		;i/p wt of load2 moved to WT2
-	
-	MOV 	AH,00h		
-	MOV 	AL,WT3			;AX register now holds weight 3.
-	MUL 	MLP1
-	DIV 	DIVI 			;changing the range of data to 0-100
-	MOV 	WT3,AL   		;i/p wt of load3 moved to wt3
-	
 	
 ;Calculating average of WT1,WT2 and WT3
 	CLC
